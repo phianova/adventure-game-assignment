@@ -9,14 +9,16 @@
 <body>
     <main class="flex flex-col items-center my-40 p-20 border-2 rounded-lg bg-orange-300 w-10/12 mx-auto">
         <div id="room-text-box" class="flex flex-col items-center">
-            <h2 id="room-name" class="my-10">Start</h2>
+            <h2 id="room-name" class="my-10">Escape (the Pina Colada game)</h2>
+            <p id="score-text" class="hidden">This text is dialogue about items found etc</p>
             <p id="room-text">Do you like pina coladas? See if you can prove yourself to your lovely lady and "escape".</p>
-            <p id="instructions">Type "start" and hit Enter to begin.</p>
+            <p id="instructions" class="my-4">Type "start" and hit Enter to begin.</p>
         </div>
         <input id="input" type="text" class="border-2">
-        <button id="help" onclick="displayHelp()" class="mt-40 border-2 rounded-md bg-white p-4">
+        <button id="help" onclick="displayHelp()" class="mt-20 border-2 rounded-md bg-white p-4">
             Help
         </button>
+        <button id="close-help" onclick="closeHelp()" class="mt-20 mb-10 border-2 rounded-md bg-white p-4 hidden">Close</button>
         <div id="instructions-popup" class="hidden flex flex-col items-center">
             <p class="text-center">Enter a command into the text box, and then press enter to proceed.
                 <br>To move in a direction, enter "move (direction)" - e.g. "move north".
@@ -25,7 +27,6 @@
                 <br>To buy an item, enter "buy (item name)".
                 <br>All commands should be no more than two words.
             </p>
-            <button id="close-help" onclick="closeHelp()" class="border-2 rounded-md bg-white p-4">Close</button>
         </div>
         <div id="game-over-screen" class="hidden flex flex-col items-center">
             <h2 id="win-lose-text" class="my-10">Game over!</h2>
