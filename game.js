@@ -53,10 +53,9 @@ class Player extends Character {
 }
 
 class NPC extends Character {
-    constructor(name, description, room, dialogue, attempts) {
+    constructor(name, description, room) {
         super (name, description, room)
-        this._dialogue = dialogue;
-        this._attempts = attempts;
+        this._dialogue = "";
     }
 
     set dialogue(value) {
@@ -68,15 +67,49 @@ class NPC extends Character {
     }
 
     set attempts(value) {
-        this._dialogue = value;
+        this._attempts = value;
     }
 
     get attempts() {
-        return this._dialogue;
+        return this._attempts;
     }
 
-    talkToCharacter() {
-        generateDialogue(this._attempts);
+    set answers(value) {
+        this._answers = value;
+    }
+
+    get answers() {
+        return this._answers;
+    }
+
+    generateDialogue (type) {
+        let answerText = "";
+        let dialogueText = this._dialogue[type];
+        if (type === "question") {
+            console.log(this.answers)
+            let answers = this.answers
+            let answersArray = []
+            answerText = () => {
+                for (let i = 0; i < answers.length;i++){
+                    answersArray.push(Object.keys(answers)[i]);
+                    console.log(answersArray);
+                }
+                return "<br>" + answersArray.join(" <br> ");
+            }
+        }
+        return dialogueText + answerText();
+    }
+    
+    converse() {
+        let dialogueType = "";
+        if (this._attempts === 0) {
+            dialogueType = "question";
+        } else if (this._attempts === 1 && answerCorrect()) {
+            dialogueType = "correct";
+        } else if (this._attempts === 1 && !answerCorrect()) {
+            dialogueType = "incorrect";
+        }     
+        return dialogueType;
     }
 }
 
@@ -141,12 +174,7 @@ class Room {
         this._linkedRooms[dir] = room;
     }
 
-    /*
-    get linkedRoomsList() {
-        return Object.entries(this._linkedRooms);
-    }*/
-
-    roomText() {
+    linkedRoomsText() {
         const linkedRoomList = Object.entries(this._linkedRooms);
         let directionsOfRooms = []
         for (const [dir, room] of linkedRoomList) {
@@ -156,12 +184,35 @@ class Room {
         return directionsOfRooms.join(" ");
     }
 
+    roomMessage() {
+        let characterMessage = "";
+        if (this._character !== "" && this._character !== undefined) {
+            characterMessage = this._character.describe();
+        }
+        let textToDisplay = "You are at the " + this._name + ". " + this._description + ". " + characterMessage + " " + this.linkedRoomsText();
+        return textToDisplay;
+    } 
+
     moveRooms(direction) {
         console.log(direction);
         console.log(this);
         console.log(this.linkedRoomsList);
         console.log(this._linkedRooms[direction])
         return this._linkedRooms[direction];
+    }
+
+    generateInstructions () {
+        let moveInstruct = "Enter a command to explore another location";
+        let charInstruct = "";
+        let itemInstruct = "";
+        if (this._character !== "" && this._character !== undefined) {
+            charInstruct = " or talk to someone here";
+        }
+        if (this._items !== "" && this._items !== undefined) {
+            charInstruct = ", talk to someone here";
+            itemInstruct = " or buy something";
+        }
+        return moveInstruct + charInstruct + itemInstruct + ".";
     }
     
 }
@@ -178,12 +229,15 @@ const OMalleys = new Room("bar, which is called O'Malley's", "It's a seedy kind 
 
 const PlayerOne = new Player("Your Name", "A player", "Beach", 0);
 
-const Bartender = new NPC("bartender", "shaking up some cocktails behind a beach bar. He looks busy, but is eyeing you up in case you want to order something.", "Beach", ["What can I get you?", "Sorry, we don't make that. Anything else?", "YES my man! The classiest drink. The one, the only pina colada. Right away!"], 2);
-const Butcher = new NPC("butcher", "bringing a huge cleaver down onto a massive slab of flesh. He looks up and smiles a big, beaming smile at you", "ButcherShop", "dialogue", 2);
-const Grocer = new NPC("grocer","hurriedly serving a queue of customers. She adjusts her glasses down her nose to check the numbers on the rickety old till as she wordlessly punches in prices", "Greengrocer", "dialogue", 1);
+const Bartender = new NPC("bartender", "shaking up some cocktails behind a beach bar. He looks busy, but is eyeing you up in case you want to order something.", "Beach");
+const Butcher = new NPC("butcher", "bringing a huge cleaver down onto a massive slab of flesh. He looks up and smiles a big, beaming smile at you", "ButcherShop");
+const Grocer = new NPC("grocer","hurriedly serving a queue of customers. She adjusts her glasses down her nose to check the numbers on the rickety old till as she wordlessly punches in prices", "Greengrocer");
 
 const YogaInstructor = new Enemy("yoga instructor", "sitting in lotus position in the middle of a moss garden, burning incense in a holder by her feet. She senses you approaching", "YogaRetreat", "dialogue", 5);
 const Lady = new Enemy("lady", "sitting cross-legged on one of the barstools, looking impatiently at the door. Wait! It's YOUR lady!", "OMalleys","dialogue", 5);
+
+Bartender.dialogue = bartenderDialogue;
+Bartender.answers = bartenderAnswers;
 
 
 Beach.linkRoom(Street, "East");
@@ -194,7 +248,7 @@ DirtRoad.linkRoom(Street, "North");
 DirtRoad.linkRoom(YogaRetreat, "South");
 YogaRetreat.linkRoom(DirtRoad,"North");
 Street2.linkRoom(Street, "West");
-Street2.linkRoom(Butcher, "North");
+Street2.linkRoom(ButcherShop, "North");
 Street2.linkRoom(Greengrocer, "South");
 Street2.linkRoom(OMalleys, "East");
 ButcherShop.linkRoom(Street2, "South");
@@ -207,23 +261,8 @@ ButcherShop.character = Butcher;
 Greengrocer.character = Grocer;
 OMalleys.character = Lady;
 
-//Function to determine text to display in each room
-const roomMessage =  (room) => {
-    let characterMessage = "";
-    if (room.character !== "" && room.character !== undefined) {
-        characterMessage = room.character.describe();
-    }
-    let textToDisplay = "You are at the " + room.name + ". " + room.description + ". " + characterMessage + " " + room.roomText();
-    return textToDisplay;
-} 
 
-//Function to generate dialogue
-const generateDialogue = (character) => {
-    if (character.attempts > 0) {
-
-    }
-}
-
+//function to handle commands
 document.addEventListener("keydown", function (event) {
     action = "";
     const directions = ["north", "south", "east", "west"];
@@ -241,8 +280,7 @@ document.addEventListener("keydown", function (event) {
         if (actionWords[0].toLowerCase() === "move") {
             if (directions.includes(actionWords[1].toLowerCase())) {
                 //TODO insert check to make sure direction goes somewhere
-                let direction = actionWords[1].toLowerCase();
-                let capsDirection = capitalLetter(direction);
+                let capsDirection = capitalLetter(actionWords[1].toLowerCase());
                 let currentRoom = Player.room;
                 let nextRoom = currentRoom.moveRooms(capsDirection);
                 newRoom(nextRoom);
@@ -250,19 +288,14 @@ document.addEventListener("keydown", function (event) {
                 alert("This is not a valid direction to move in. Please try again.")
             }
         }
-        /* FOR LATER */
-        if (actionWords[0].toLowerCase() === "buy") {
-            if (items.includes(actionWords[1].toLowerCase())) {
-                //buyItem();
-            } else {
-                alert("This is not a valid item to buy. Please try again.")
-            }
-        }
 
         if (actionWords[0].toLowerCase() === "talk") {
+            let room = Player.room;
             if (room.character !== "") {
                 let character = room.character;
-                character.talkToCharacter();
+                let dialogueType = character.converse();
+                let dialogue = character.generateDialogue(dialogueType);
+                newDialogueScreen(dialogue, dialogueType);
             } else {
                 alert("There is noone here to talk to. Please try another action.")
             }
@@ -275,6 +308,16 @@ document.addEventListener("keydown", function (event) {
                 alert("This is not a valid answer. Please answer a, b, c or d.")
             }
         }    
+
+        /* FOR LATER */
+        if (actionWords[0].toLowerCase() === "buy") {
+            if (items.includes(actionWords[1].toLowerCase())) {
+                //buyItem();
+            } else {
+                alert("This is not a valid item to buy. Please try again.")
+            }
+        }
+
         //reset input regardless of value entered
         document.getElementById("input").value = "";
     }
@@ -282,38 +325,37 @@ document.addEventListener("keydown", function (event) {
 })
 
 const startGame = () => {
-    document.getElementById("room-text").innerHTML = roomMessage(Beach);
-    document.getElementById("instructions").innerHTML = generateInstructions(Beach);
+    document.getElementById("room-text").innerHTML = Beach.roomMessage();
+    document.getElementById("instructions").innerHTML = Beach.generateInstructions();
     document.getElementById("input").value = "";
     Player.room = Beach;
 }
 
 const newRoom = (room) => {
-    document.getElementById("room-text").innerHTML = roomMessage(room);
-    document.getElementById("instructions").innerHTML = generateInstructions(room);
+    document.getElementById("room-text").innerHTML = room.roomMessage();
+    document.getElementById("instructions").innerHTML = room.generateInstructions();
     document.getElementById("input").value = "";
     Player.room = room;
+    let roomCharacter = room.character;
+    roomCharacter.attempts = 0;
 }
 
+const newDialogueScreen = (dialogue, dialogueType) => {
+    document.getElementById("dialogue-text").style.display = "flex";
+    document.getElementById("dialogue-text").innerHTML = dialogue;
+    if (dialogueType === "question") {
+        document.getElementById("instructions").innerHTML = 'Type "answer" followed by your answer to proceed';
+    } else {
+        document.getElementById("instructions").innerHTML = "They don't seem to want to talk any more.";
+    }
+    document.getElementById("input").value = "";
+}
+
+/*
 const buyItem = () => {
 
 }
-
-console.log(Beach.linkedRoomsList);
-const generateInstructions = (room) => {
-    let moveInstruct = "Enter a command to explore another location";
-    let charInstruct = "";
-    let itemInstruct = "";
-    if (room.character !== "" && room.character !== undefined) {
-        charInstruct = " or talk to someone here";
-    }
-    if (room.items !== "" && room.items !== undefined) {
-        console.log(room.items);
-        itemInstruct = " or buy something";
-        charInstruct = ", talk to someone here";
-    }
-    return moveInstruct + charInstruct + itemInstruct + ".";
-}
+*/
 
 
 //Functions to display or hide instructions.

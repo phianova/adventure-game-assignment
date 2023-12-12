@@ -1,3 +1,9 @@
+const bartenderDialogue =  {
+    question: "What can I get ya?",
+    incorrect: "Sorry, we don't make that. NEXT!",
+    correct: "YES my man! The classiest drink. The one, the only pina colada. Right away!"
+}
+
 const bartenderAnswers = {
     a: { 
         answer: "Mojito",
@@ -27,11 +33,11 @@ const yogaAnswers = {
         correct: true
     },
     c: { 
-        answer: "",
+        answer: "Baby Shark",
         correct: true
     },
     d: { 
-        answer: "Margarita",
+        answer: "Pina Colada",
         correct: true
     }
 }
