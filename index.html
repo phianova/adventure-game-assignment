@@ -4,8 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    
+    <main class="flex flex-col items-center my-40 p-20 border-2 rounded-lg bg-orange-300 w-10/12 mx-auto">
+        <div id="room-text-box" class="flex flex-col items-center">
+            <h2 id="room-name" class="my-10">Start</h2>
+            <p id="room-text">Do you like pina coladas? See if you can prove yourself to your lovely lady and "escape".</p>
+            <p id="instructions">Type "start" and hit Enter to begin.</p>
+        </div>
+        <input id="input" type="text" class="border-2">
+        <button id="help" onclick="displayHelp()" class="mt-40 border-2 rounded-md bg-white p-4">
+            Help
+        </button>
+        <div id="instructions-popup" class="hidden flex flex-col items-center">
+            <p class="text-center">Enter a command into the text box, and then press enter to proceed.
+                <br>To move in a direction, enter "move (direction)" - e.g. "move north".
+                <br>To talk to a character in a room, enter "talk".
+                <br>Sometimes a character might ask you a question. To answer, enter "answer (your answer)" - answers will be a, b, c or d.
+                <br>To buy an item, enter "buy (item name)".
+                <br>All commands should be no more than two words.
+            </p>
+            <button id="close-help" onclick="closeHelp()" class="border-2 rounded-md bg-white p-4">Close</button>
+        </div>
+        <div id="game-over-screen" class="hidden flex flex-col items-center">
+            <h2 id="win-lose-text" class="my-10">Game over!</h2>
+            <button id="start-again">Try again?</button>
+        </div>
+        <script src="game.js"></script>
+    </main>
 </body>
 </html>

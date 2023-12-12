@@ -37,8 +37,8 @@ class Character {
 
 
 class Player extends Character {
-    constructor(name, description, currentRoom, hitPoints, score) {
-        super (name,description,currentRoom,hitPoints)
+    constructor(name, description, room, score) {
+        super (name,description,room)
         this._score = score;
     }
 
@@ -92,9 +92,10 @@ class Enemy extends NPC {
 }
 
 class Room {
-    constructor(name, description) {
+    constructor(name, description, items) {
         this._name = name;
         this._description = description;
+        this._items = items;
         this._linkedRooms = {};
     }
 
@@ -104,6 +105,14 @@ class Room {
 
     set description(value) {
         this._description = value;
+    }
+
+    set items(value) {
+        this._items = value;
+    }
+
+    get items() {
+        return this._items;
     }
 
     get name() {
@@ -204,4 +213,96 @@ const generateDialogue = (character) => {
     }
 }
 
-console.log(roomMessage(ButcherShop));
+document.addEventListener("keydown", function (event) {
+    action = "";
+    const directions = ["north", "south", "east", "west"];
+    const items = ["quinoa", "champagne", "brain", "kidneys", "heart", "liver"]
+    const answers = ["a", "b", "c", "d"]
+    const validCommands = ["start", "buy", "talk", "move", "answer", "north", "south", "east", "west"];
+    if (event.key === "Enter") {
+        action = document.getElementById("input").value;
+        actionWords = action.split(" ");
+        if (actionWords[0].toLowerCase() === "start") {
+            startGame();
+        } else if (!validCommands.includes(actionWords[0].toLowerCase())){
+            alert("This is not a valid action. Please try again.");
+        }
+        if (actionWords[0].toLowerCase() === "move") {
+            if (directions.includes(actionWords[1].toLowerCase())) {
+                console.log(1);
+                //moveRooms();
+            } else {
+                alert("This is not a valid direction to move in. Please try again.")
+            }
+        }
+        /* FOR LATER */
+        if (actionWords[0].toLowerCase() === "buy") {
+            if (items.includes(actionWords[1].toLowerCase())) {
+                console.log(1);
+                //buyItem();
+            } else {
+                alert("This is not a valid item to buy. Please try again.")
+            }
+        }
+
+        if (actionWords[0].toLowerCase() === "talk") {
+            if (room.character !== "") {
+                console.log(1);
+                //talkToCharacter();
+            } else {
+                alert("There is noone here to talk to. Please try another action.")
+            }
+        }    
+
+        if (actionWords[0].toLowerCase() === "answer") {
+            if (answers.includes(actionWords[1].toLowerCase())) {
+                console.log(1);
+                //answerQuestion();
+            } else {
+                alert("This is not a valid answer. Please answer a, b, c or d.")
+            }
+        }    
+        //reset input regardless of value entered
+        document.getElementById("input").value = "";
+    }
+    
+})
+
+const startGame = () => {
+    document.getElementById("room-text").innerHTML = roomMessage(Beach);
+    document.getElementById("instructions").innerHTML = generateInstructions(Beach);
+    document.getElementById("input").value = "";
+}
+
+const moveRooms = () => {
+
+}
+
+const buyItem = () => {
+
+}
+
+const generateInstructions = (room) => {
+    let moveInstruct = "Enter a command to explore another location";
+    let charInstruct = "";
+    let itemInstruct = "";
+    if (room.character !== "" && room.character !== undefined) {
+        charInstruct = " or talk to someone here";
+    }
+    if (room.items !== "" && room.items !== undefined) {
+        console.log(room.items);
+        itemInstruct = " or buy something";
+        charInstruct = ", talk to someone here";
+    }
+    return moveInstruct + charInstruct + itemInstruct + ".";
+}
+
+
+//Functions to display or hide instructions.
+const displayHelp = () => {
+    document.getElementById("instructions-popup").style.display = "flex"
+}
+
+const closeHelp = () => {
+    document.getElementById("instructions-popup").style.display = "none"
+}
