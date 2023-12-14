@@ -7,14 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-mono">
-    <main class="my-36 border-2 rounded-lg bg-[url('./background.jpg')] w-10/12 mx-auto">
-        <div class="flex flex-col items-center bg-white bg-opacity-40 p-10 w-full h-full">
-        <div id="room-text-box" class="flex flex-col items-center bg-white bg-opacity-30 pb-10 rounded-full">
-            <h2 id="room-name" class="my-10 text-xl font-bold text-center">Escape<br>(the Pina Colada game)</h2>
-            <p id="score-text" class="hidden my-4 px-8 text-center">This text is dialogue about items found etc</p>
-            <p id="room-text" class="my-4 px-8 text-center">Do you like pina coladas? See if you can prove yourself to your lovely lady and "escape".</p>
-            <p id="dialogue-text" class="hidden my-4 px-8 text-center">This text is dialogue about items found etc</p>
-            <p id="instructions" class="my-4 px-8 text-center">Type "start" and hit Enter to begin.</p>
+    <main class="my-20 border-2 rounded-lg bg-[url('./background.jpg')] w-10/12 mx-auto">
+        <div class="flex flex-col items-center bg-white bg-opacity-60 p-5 md:p-10 w-full h-full">
+        <div id="room-text-box" class="flex flex-col items-center bg-white bg-opacity-80 pb-10 rounded-full w-full md:w-10/12">
+            <h2 id="room-name" class="mt-16 md:my-10 text-xl md:text-3xl font-bold text-center">Escape<br>(the Pina Colada game)</h2>
+            <p id="room-text" class="my-4 px-4 md:px-8 text-center md:text-lg">Do you like pina coladas? See if you can prove yourself to your lovely lady and "escape".</p>
+            <br>
+            <p id="dialogue-text" class="hidden my-4 px-4 md:px-8 text-center md:text-lg">This text is dialogue about items found etc</p>
+            <h2 id="win-text" class="hidden my-8 text-xl md:text-3xl font-bold text-center">You escaped!</h2>
+            <p id="instructions" class="my-4 px-4 md:px-8 text-center md:text-lg">Type "start" and hit Enter to begin.</p>
         </div>
         <input id="input" type="text" class="border-4 border-gray-400 my-4 rounded-md">
         <button id="help" onclick="displayHelp()" class="mt-20 border-2 rounded-lg bg-white p-4">
@@ -26,16 +27,12 @@
                 <br>To move in a direction, enter "move (direction)" - e.g. "move north".
                 <br>To talk to a character in a room, enter "talk".
                 <br>Sometimes a character might ask you a question. To answer, enter "answer (your answer)" - answers will be a, b, c or d.
-                <br>To buy an item, enter "buy (item name)".
                 <br>All commands should be no more than two words.
             </p>
         </div>
-        <div id="game-over-screen" class="hidden flex flex-col items-center">
-            <h2 id="win-lose-text" class="my-10">Game over!</h2>
-            <button id="start-again">Try again?</button>
-        </div>
         <script src="dialogue.js"></script>
         <script src="game.js"></script>
+        <audio src="./escape.mp3" id="audio" class="mt-10 bg-white bg-opacity-20"></audio>
         </div>
     </main>
 </body>

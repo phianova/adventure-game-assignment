@@ -97,7 +97,8 @@ const grocerAnswers = {
 const ladyDialogue = {
     question: "Oh hey...I guess you're the guy I'm waiting for? But it's raining...you wanna wait til it stops before we get out of here?",
     incorrect: "Oh...I thought you liked getting caught in the rain.",
-    correct: "Yay! Let's get caught in the rain together. But first, let me check you have everything I'm looking for..."
+    correct: "Yay! Let's get caught in the rain together. But first, let me check you have everything I'm looking for...",
+    complete: "You ready for me to see if you have everything I'm looking for?"
 }
 
 const ladyAnswers = {

@@ -114,7 +114,7 @@ class NPC extends Character {
                 answersArray.push(answersValues[i]);
                 answersArray.push("<br>")
             }
-            answerText = "<br>" + answersArray.join(" ");
+            answerText = "<br><br>" + answersArray.join(" ");
         } else if (type === "correct") {
             if (this._items !== "") {
                 let inventory = PlayerOne.items;
@@ -240,7 +240,7 @@ class Room {
         if (this._character !== "" && this._character !== undefined) {
             characterMessage = this._character.describe();
         }
-        let textToDisplay = "You are at the " + this._name + ". " + this._description + ". " + characterMessage + " " + this.linkedRoomsText();
+        let textToDisplay = "You are at the " + this._name + ". " + this._description + ". <br><br>" + characterMessage + " <br><br>" + this.linkedRoomsText();
         return textToDisplay;
     } 
 
@@ -269,10 +269,10 @@ const Beach = new Room("beach", "The sand feels hot between your toes and a sea 
 const Street = new Room("main street", "The cobbles are warm and there are plenty of holidaymakers milling around");
 const DirtRoad = new Room("dirt road", "There are a few trees, and a sign pointing up the hill to a yoga retreat")
 const YogaRetreat = new Room("yoga retreat", "There's a large water feature, a Buddha statue and wind chimes are sounding around you");
-const Street2 = new Room("main street east end", "There are shops lining both sides of the street and some kids riding their bicycles up and down");
+const Street2 = new Room("main street (east end)", "There are shops lining both sides of the street and some kids riding their bicycles up and down");
 const ButcherShop = new Room("butcher's shop", "It's an old-fashioned kind of shop, with lots of different cuts of meat and offal laid out on the counters");
 const Greengrocer = new Room("greengrocer", "It smells of fresh greens in here. There are fruits, vegetables, grains and bottles and cans in abundance lining all the shelves");
-const OMalleys = new Room("bar, which is called O'Malley's", "It's a seedy kind of place, with red velvet stools next to an old wooden bar");
+const OMalleys = new Room("bar, called O'Malley's", "It's a seedy kind of place, with red velvet stools next to an old wooden bar");
 
 const PlayerOne = new Player("Your Name", "A player", "Beach", 0);
 
@@ -282,7 +282,7 @@ const Grocer = new NPC("grocer","hurriedly serving a queue of customers. She adj
 const YogaInstructor = new NPC("yoga instructor", "sitting in lotus position in the middle of a moss garden, burning incense in a holder by her feet. She senses you approaching", "YogaRetreat");
 
 //const YogaInstructor = new Enemy("yoga instructor", "sitting in lotus position in the middle of a moss garden, burning incense in a holder by her feet. She senses you approaching", "YogaRetreat", "dialogue", 5);
-const Lady = new Enemy("lady", "sitting cross-legged on one of the barstools, looking impatiently at the door. Wait! It's YOUR lady!", "OMalleys","dialogue", 5);
+const Lady = new Enemy("lady", "sitting cross-legged on one of the barstools, looking impatiently at the door. Wait! It's YOUR lady", "OMalleys","dialogue", 5);
 
 Bartender.dialogue = bartenderDialogue;
 Bartender.answers = bartenderAnswers;
@@ -301,20 +301,20 @@ Lady.answers = ladyAnswers;
 Lady.items = ["Caught in the rain"];
 
 
-Beach.linkRoom(Street, "East");
-Street.linkRoom(Beach, "West");
-Street.linkRoom(Street2, "East");
-Street.linkRoom(DirtRoad, "South");
-DirtRoad.linkRoom(Street, "North");
-DirtRoad.linkRoom(YogaRetreat, "South");
-YogaRetreat.linkRoom(DirtRoad,"North");
-Street2.linkRoom(Street, "West");
-Street2.linkRoom(ButcherShop, "North");
-Street2.linkRoom(Greengrocer, "South");
-Street2.linkRoom(OMalleys, "East");
-ButcherShop.linkRoom(Street2, "South");
-Greengrocer.linkRoom(Street2, "North");
-OMalleys.linkRoom(Street2, "West")
+Beach.linkRoom(Street, "east");
+Street.linkRoom(Beach, "west");
+Street.linkRoom(Street2, "east");
+Street.linkRoom(DirtRoad, "south");
+DirtRoad.linkRoom(Street, "north");
+DirtRoad.linkRoom(YogaRetreat, "south");
+YogaRetreat.linkRoom(DirtRoad,"north");
+Street2.linkRoom(Street, "west");
+Street2.linkRoom(ButcherShop, "north");
+Street2.linkRoom(Greengrocer, "south");
+Street2.linkRoom(OMalleys, "east");
+ButcherShop.linkRoom(Street2, "south");
+Greengrocer.linkRoom(Street2, "north");
+OMalleys.linkRoom(Street2, "west")
 
 Beach.character = Bartender;
 YogaRetreat.character = YogaInstructor;
@@ -340,9 +340,9 @@ document.addEventListener("keydown", function (event) {
         if (actionWords[0].toLowerCase() === "move") {
             let currentRoom = PlayerOne.room;
             let availableDirections = currentRoom.linkedRoomList.map(([direction]) => direction);
-            let capsDirection = capitalLetter(actionWords[1]);
-            if (directions.includes(actionWords[1].toLowerCase()) && availableDirections.includes(capsDirection)) {
-                let nextRoom = currentRoom.moveRooms(capsDirection);
+            let direction = actionWords[1];
+            if (directions.includes(actionWords[1].toLowerCase()) && availableDirections.includes(direction)) {
+                let nextRoom = currentRoom.moveRooms(direction);
                 newRoom(nextRoom);
             } else {
                 alert("This is not a valid direction to move in. Please try again.")
@@ -399,10 +399,22 @@ document.addEventListener("keydown", function (event) {
 })
 
 const startGame = () => {
-    var music = document.createElement("audio");
+    /*let existingMusic = document.getElementsByTagName('audio');
+    console.log(existingMusic);
+    if (existingMusic.length !== 0) {
+        existingMusic.remove();
+    }*/
+
+    var music = document.getElementById("audio");
     music.setAttribute("src", "./escape.mp3");
     music.setAttribute("autoplay", "autoplay");
-    music.loop = true;
+    music.setAttribute("controls", "controls");
+    music.setAttribute("loop", "loop");
+
+    console.log(document.getElementsByTagName('audio'));
+
+    document.getElementById("dialogue-text").style.display = "none";
+    document.getElementById("room-text").style.display = "flex";
 
     document.getElementById("room-name").innerHTML = capitalLetter(Beach.name);
     document.getElementById("room-text").innerHTML = Beach.roomMessage();
@@ -410,7 +422,11 @@ const startGame = () => {
     document.getElementById("input").value = "";
 
     PlayerOne.items = [];
-    Character.attempts = 0;
+    Bartender.attempts = 0;
+    YogaInstructor.attempts = 0;
+    Butcher.attempts = 0;
+    Grocer.attempts = 0;
+    Lady.attempts = 0;
 
     PlayerOne.room = Beach;
     let roomCharacter = Beach.character;
@@ -418,6 +434,7 @@ const startGame = () => {
 }
 
 const newRoom = (room) => {
+    document.getElementById("room-text").style.display = "flex";
     document.getElementById("room-name").innerHTML = capitalLetter(room.name);
     document.getElementById("dialogue-text").style.display = "none";
     document.getElementById("room-text").innerHTML = room.roomMessage();
@@ -431,12 +448,13 @@ const newRoom = (room) => {
 }
 
 const newDialogueScreen = (dialogue, dialogueType) => {
+    document.getElementById("room-text").style.display = "none";
     document.getElementById("dialogue-text").style.display = "flex";
     document.getElementById("dialogue-text").innerHTML = dialogue;
     let currentRoom = PlayerOne.room;
     let character = currentRoom.character;
     if (dialogueType === "question") {
-        document.getElementById("instructions").innerHTML = 'Type "answer" followed by your answer (a, b, c or d) to proceed';
+        document.getElementById("instructions").innerHTML = 'Type "answer" followed by your answer (a, b, c or d) to proceed.';
     } else if (character === Lady) {
         document.getElementById("instructions").innerHTML = 'Enter "check" to see if you have everything she\'s looking for - or "leave" to explore further first.';
     } else {
@@ -447,6 +465,7 @@ const newDialogueScreen = (dialogue, dialogueType) => {
 
 const endDialogue = () => {
     document.getElementById("dialogue-text").style.display = "none";
+    document.getElementById("room-text").style.display = "flex";
     newRoom(PlayerOne.room);
 }
 
@@ -457,7 +476,8 @@ const bossFight = () => {
         document.getElementById("dialogue-text").style.display = "flex";
         document.getElementById("dialogue-text").innerHTML =  generateBossDialogue();
         document.getElementById("room-text").style.display = "none";
-        document.getElementById("instructions").innerHTML = 'Enter "restart" to play again';
+        document.getElementById("win-text").style.display = "flex";
+        document.getElementById("instructions").innerHTML = 'Enter "restart" to play again.';
         document.getElementById("input").value = "";
     } else {
         //lose screen:
@@ -465,7 +485,7 @@ const bossFight = () => {
         document.getElementById("dialogue-text").style.display = "flex";
         document.getElementById("dialogue-text").innerHTML = generateBossDialogue();
         document.getElementById("room-text").style.display = "none";
-        document.getElementById("instructions").innerHTML = 'Enter "restart" to play again';
+        document.getElementById("instructions").innerHTML = 'Enter "restart" to play again.';
         document.getElementById("input").value = "";   
     }
 }
@@ -488,9 +508,9 @@ const generateBossDialogue = () => {
     let string2 = (inventory.includes("Caught in the rain")) ? "You like getting caught in the rain," : "You don't like getting caught in the rain...";
     let string3 = (inventory.includes("Not into yoga")) ? "You're not into yoga," : "You're into yoga!";
     let string4 = (inventory.includes("Half a brain")) ? "You have half a brain," : "You don't have half a brain!";
-    let string5 = (inventory.includes("Champagne")) ? "And you're into champagne!" : "But you're into health food, not champagne. Ew.";
+    let string5 = (inventory.includes("Champagne")) ? "And you're into champagne!" : "And you're into health food, not champagne. Ew.";
     let string6 = winConditions() ? "You have everything I'm looking for! Let's get out of here and escape." : "You don't have everything I'm looking for. Sorry.";
-    return `Your lady says: "${string1} <br> ${string2} <br> ${string3} <br> ${string4} <br> ${string5} <br> ${string6}`
+    return `Your lady says: <br><br>"${string1} <br> ${string2} <br> ${string3} <br> ${string4} <br> ${string5} <br><br> ${string6}`
 }
 
 //Functions to display or hide instructions.
@@ -508,7 +528,7 @@ const closeHelp = () => {
 
 }
 
-//REUSABLE: Capitalise directions
+//REUSABLE: Capitalise words
 const capitalLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
