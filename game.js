@@ -238,9 +238,9 @@ class Room {
     roomMessage() {
         let characterMessage = "";
         if (this._character !== "" && this._character !== undefined) {
-            characterMessage = this._character.describe();
+            characterMessage = "<br>" + this._character.describe() + "<br>";
         }
-        let textToDisplay = "You are at the " + this._name + ". " + this._description + ". <br><br>" + characterMessage + " <br><br>" + this.linkedRoomsText();
+        let textToDisplay = "You are at the " + this._name + ". " + this._description + ". <br>" + characterMessage + " <br>" + this.linkedRoomsText();
         return textToDisplay;
     } 
 
