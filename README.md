@@ -61,3 +61,5 @@ My refactor and extension ideas are:
 4. Make the items an actual class with a constructor.
 5. Have the "boss fight" be more dynamic with multiple stages.
 6. Have unwanted items also show up in the inventory, so there are different dialogues at the end for having chosen INCORRECTLY versus not choosing at all.
+7. Refactor: Put classes and declarations in a separate .js file
+8. Introduce unit tests.
