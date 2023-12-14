@@ -7,14 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-mono">
-    <main class="my-20 border-2 rounded-lg bg-[url('./background.jpg')] w-10/12 mx-auto">
+    <main class="my-4 sm:my-20 border-2 rounded-lg bg-[url('./background.jpg')] w-10/12 mx-auto">
         <div class="flex flex-col items-center bg-white bg-opacity-60 p-5 md:p-10 w-full h-full">
         <div id="room-text-box" class="flex flex-col items-center bg-white bg-opacity-80 pb-10 rounded-full w-full md:w-10/12">
-            <h2 id="room-name" class="mt-16 md:my-10 text-xl md:text-3xl font-bold text-center">Escape<br>(the Pina Colada game)</h2>
-            <p id="room-text" class="my-4 px-4 md:px-8 text-center md:text-lg">Do you like pina coladas? See if you can prove yourself to your lovely lady and "escape".</p>
-            <br>
-            <p id="dialogue-text" class="hidden my-4 px-4 md:px-8 text-center md:text-lg">This text is dialogue about items found etc</p>
-            <h2 id="win-text" class="hidden my-8 text-xl md:text-3xl font-bold text-center">You escaped!</h2>
+            <h2 id="room-name" class="mt-16 md:my-16 text-xl md:text-3xl font-bold text-center">Escape<br>(the Pina Colada game)</h2>
+            <p id="room-text" class="mt-4 sm:my-4 px-4 md:px-8 text-center md:text-lg">Do you like pina coladas? See if you can prove yourself to your lovely lady and "escape".</p>
+            <br class="hidden md:block">
+            <p id="dialogue-text" class="hidden mt-4 sm:my-4 px-4 md:px-8 text-center md:text-lg">This text is dialogue about items found etc</p>
+            <h2 id="win-text" class="hidden mt-4 sm:my-8 text-xl md:text-3xl font-bold text-center">You escaped!</h2>
             <p id="instructions" class="my-4 px-4 md:px-8 text-center md:text-lg">Type "start" and hit Enter to begin.</p>
         </div>
         <input id="input" type="text" class="border-4 border-gray-400 my-4 rounded-md">
