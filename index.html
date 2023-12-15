@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escape (the Pina Colada game)</title>
-    <link rel="icon" href="./icon.png">
+    <link rel="icon" href="./media/icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-mono">
-    <main class="my-4 sm:my-20 border-2 rounded-lg bg-[url('./background.jpg')] w-10/12 mx-auto">
+    <main class="my-4 sm:my-20 border-2 rounded-lg bg-[url('./media/background.jpg')] w-10/12 mx-auto">
         <div class="flex flex-col items-center bg-white bg-opacity-60 p-5 md:p-10 w-full h-full">
         <div id="room-text-box" class="flex flex-col items-center bg-white bg-opacity-80 pb-10 rounded-full w-full md:w-10/12">
-            <h2 id="room-name" class="mt-16 md:my-16 text-xl md:text-3xl font-bold text-center">Escape<br>(the Pina Colada game)</h2>
+            <h2 id="room-name" class="mt-16 md:mb-8 text-xl md:text-3xl font-bold text-center">Escape<br>(the Pina Colada game)</h2>
             <p id="room-text" class="mt-4 sm:my-4 px-4 md:px-8 text-center md:text-lg">Do you like pina coladas? See if you can prove yourself to your lovely lady and "escape".</p>
-            <br class="hidden md:block">
             <p id="dialogue-text" class="hidden mt-4 sm:my-4 px-4 md:px-8 text-center md:text-lg">This text is dialogue about items found etc</p>
+            <img id="item-image" src="./media/pinaColada.png" class="hidden h-40 p-2">
             <h2 id="win-text" class="hidden mt-4 sm:my-8 text-xl md:text-3xl font-bold text-center">You escaped!</h2>
-            <p id="instructions" class="my-4 px-4 md:px-8 text-center md:text-lg">Type "start" and hit Enter to begin.</p>
+            <p id="instructions" class="my-4 px-4 md:px-8 text-center md:text-lg">Type "start" and hit Enter to begin. Click the "help" button at any time for an overview of the commands.</p>
         </div>
         <input id="input" type="text" class="border-4 border-gray-400 my-4 rounded-md">
         <button id="help" onclick="displayHelp()" class="mt-20 border-2 rounded-lg bg-white p-4">
@@ -33,7 +33,7 @@
         </div>
         <script src="dialogue.js"></script>
         <script src="game.js"></script>
-        <audio src="./escape.mp3" id="audio" class="mt-10 bg-white bg-opacity-20"></audio>
+        <audio src="./media/escape.mp3" id="audio" class="mt-10 bg-white bg-opacity-20"></audio>
         </div>
     </main>
 </body>

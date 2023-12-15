@@ -286,16 +286,16 @@ const Lady = new Enemy("lady", "sitting cross-legged on one of the barstools, lo
 
 Bartender.dialogue = bartenderDialogue;
 Bartender.answers = bartenderAnswers;
-Bartender.items = ["Pina colada"];
+Bartender.items = ["Pina colada", "./media/pinaColada.png"];
 YogaInstructor.dialogue = yogaDialogue;
 YogaInstructor.answers = yogaAnswers;
 YogaInstructor.items = ["Not into yoga"];
 Butcher.dialogue = butcherDialogue;
 Butcher.answers = butcherAnswers;
-Butcher.items = ["Half a brain"];
+Butcher.items = ["Half a brain", "./media/halfABrain.png"];
 Grocer.dialogue = grocerDialogue;
 Grocer.answers = grocerAnswers;
-Grocer.items = ["Champagne"];
+Grocer.items = ["Champagne", "./media/champagne.png"];
 Lady.dialogue = ladyDialogue;
 Lady.answers = ladyAnswers;
 Lady.items = ["Caught in the rain"];
@@ -367,6 +367,12 @@ document.addEventListener("keydown", function (event) {
                 let character = currentRoom.character;
                 let dialogueType = character.getDialogueType(actionWords[1].toLowerCase());
                 let dialogue = character.generateDialogue(dialogueType);
+                if (dialogueType === "correct" && character !== Lady && character !== YogaInstructor) {
+                    let itemImage = document.getElementById("item-image")
+                    itemImage.style.display = "flex";
+                    itemImage.src = character.items[1];
+                    console.log(itemImage.src);
+                } 
                 newDialogueScreen(dialogue, dialogueType);
             } else {
                 alert("This is not a valid answer. Please answer a, b, c or d.")
@@ -406,7 +412,7 @@ const startGame = () => {
     }*/
 
     var music = document.getElementById("audio");
-    music.setAttribute("src", "./escape.mp3");
+    music.setAttribute("src", "./media/escape.mp3");
     music.setAttribute("autoplay", "autoplay");
     music.setAttribute("controls", "controls");
     music.setAttribute("loop", "loop");
@@ -414,6 +420,7 @@ const startGame = () => {
     console.log(document.getElementsByTagName('audio'));
 
     document.getElementById("dialogue-text").style.display = "none";
+    document.getElementById("win-text").style.display = "none";
     document.getElementById("room-text").style.display = "flex";
 
     document.getElementById("room-name").innerHTML = capitalLetter(Beach.name);
@@ -437,6 +444,7 @@ const newRoom = (room) => {
     document.getElementById("room-text").style.display = "flex";
     document.getElementById("room-name").innerHTML = capitalLetter(room.name);
     document.getElementById("dialogue-text").style.display = "none";
+    document.getElementById("item-image").style.display = "none";
     document.getElementById("room-text").innerHTML = room.roomMessage();
     document.getElementById("instructions").innerHTML = room.generateInstructions();
     document.getElementById("input").value = "";
@@ -465,6 +473,7 @@ const newDialogueScreen = (dialogue, dialogueType) => {
 
 const endDialogue = () => {
     document.getElementById("dialogue-text").style.display = "none";
+    document.getElementById("item-image").style.display = "none";
     document.getElementById("room-text").style.display = "flex";
     newRoom(PlayerOne.room);
 }
