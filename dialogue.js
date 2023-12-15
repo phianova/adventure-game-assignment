@@ -27,7 +27,7 @@ const bartenderAnswers = {
 const yogaDialogue =  {
     question: 'Namaste. Do you want to join our session?"<br> You insist you are not into yoga. She raises an eyebrow and says "Come on. I bet you love it. I bet you can even answer this question - which of these is a real yoga position?',
     incorrect: "I KNEW IT! You ARE into yoga.",
-    correct: "Oh wow. No, no that won't do. I guess you really aren't into yoga.",
+    correct: "Oh wow. No, that won't do. I guess you really aren't into yoga.",
     complete: "Breathe in....breathe out...."
 }
 

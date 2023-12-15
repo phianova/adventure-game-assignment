@@ -36,9 +36,8 @@ class Character {
 }
 
 class Player extends Character {
-    constructor(name, description, room, score) {
+    constructor(name, description, room) {
         super (name, description, room)
-        this._score = score;
         this._items = [];
     }
 
@@ -125,7 +124,7 @@ class NPC extends Character {
                     answerText = `<br><br> You have proven you like getting caught in the rain!`
                 } else {
                     answerText = `<br><br> You have received a ${this._items[0]}!`;
-                }console.log(inventory);
+                }
             }
         }
         return `The ${this._name} says: "${dialogueText}" ${answerText}`;
@@ -164,24 +163,6 @@ class NPC extends Character {
         return correct;
     }
     
-}
-
-class Enemy extends NPC {
-    constructor(name, description, room, dialogue, hitPoints) {
-        super (name,description,room,dialogue)
-        this._hitPoints = hitPoints;
-    }
-
-    set hitPoints(value) {
-        this._hitPoints = value;
-    }
-
-    get hitPoints() {
-        return this._hitPoints;
-    }
-
-
-
 }
 
 class Room {
@@ -251,15 +232,10 @@ class Room {
     generateInstructions () {
         let moveInstruct = "Enter a command to explore another location";
         let charInstruct = "";
-        let itemInstruct = "";
         if (this._character !== "" && this._character !== undefined) {
             charInstruct = " or talk to someone here";
         }
-        if (this._items !== "" && this._items !== undefined) {
-            charInstruct = ", talk to someone here";
-            itemInstruct = " or buy something";
-        }
-        return moveInstruct + charInstruct + itemInstruct + ".";
+        return moveInstruct + charInstruct + ".";
     }
     
 }
@@ -274,15 +250,14 @@ const ButcherShop = new Room("butcher's shop", "It's an old-fashioned kind of sh
 const Greengrocer = new Room("greengrocer", "It smells of fresh greens in here. There are fruits, vegetables, grains and bottles and cans in abundance lining all the shelves");
 const OMalleys = new Room("bar, called O'Malley's", "It's a seedy kind of place, with red velvet stools next to an old wooden bar");
 
-const PlayerOne = new Player("Your Name", "A player", "Beach", 0);
+const PlayerOne = new Player("Your Name", "A player", "Beach");
 
 const Bartender = new NPC("bartender", "shaking up some cocktails behind a beach bar. He looks busy, but is eyeing you up in case you want to order something", "Beach");
 const Butcher = new NPC("butcher", "bringing a huge cleaver down onto a massive slab of flesh. He looks up and smiles a big, beaming smile at you", "ButcherShop");
 const Grocer = new NPC("grocer","hurriedly serving a queue of customers. She adjusts her glasses down her nose to check the numbers on the rickety old till as she wordlessly punches in prices", "Greengrocer");
 const YogaInstructor = new NPC("yoga instructor", "sitting in lotus position in the middle of a moss garden, burning incense in a holder by her feet. She senses you approaching", "YogaRetreat");
 
-//const YogaInstructor = new Enemy("yoga instructor", "sitting in lotus position in the middle of a moss garden, burning incense in a holder by her feet. She senses you approaching", "YogaRetreat", "dialogue", 5);
-const Lady = new Enemy("lady", "sitting cross-legged on one of the barstools, looking impatiently at the door. Wait! It's YOUR lady", "OMalleys","dialogue", 5);
+const Lady = new NPC("lady", "sitting cross-legged on one of the barstools, looking impatiently at the door. Wait! It's YOUR lady", "OMalleys");
 
 Bartender.dialogue = bartenderDialogue;
 Bartender.answers = bartenderAnswers;
@@ -328,14 +303,15 @@ document.addEventListener("keydown", function (event) {
     action = "";
     const directions = ["north", "south", "east", "west"];
     const answers = ["a", "b", "c", "d"]
-    const validCommands = ["start", "restart", "talk", "move", "answer", "leave", "check", "north", "south", "east", "west"]; //for later: "buy",
+    const validCommands = ["start", "restart", "talk", "move", "answer", "leave", "check", "north", "south", "east", "west"];
     if (event.key === "Enter") {
         action = document.getElementById("input").value;
         actionWords = action.split(" ");
         if (actionWords[0].toLowerCase() === "start" || actionWords[0].toLowerCase() === "restart") {
             startGame();
         } else if (!validCommands.includes(actionWords[0].toLowerCase())){
-            alert("This is not a valid action. Please try again.");
+            document.getElementById("alert-text").style.display = "flex";
+            document.getElementById("alert-text").innerHTML = "This is not a valid action. Please try again.";
         }
         if (actionWords[0].toLowerCase() === "move") {
             let currentRoom = PlayerOne.room;
@@ -345,7 +321,8 @@ document.addEventListener("keydown", function (event) {
                 let nextRoom = currentRoom.moveRooms(direction);
                 newRoom(nextRoom);
             } else {
-                alert("This is not a valid direction to move in. Please try again.")
+                document.getElementById("alert-text").style.display = "flex";
+                document.getElementById("alert-text").innerHTML = "This is not a valid direction to move in. Please try again.";    
             }
         
         }
@@ -357,7 +334,8 @@ document.addEventListener("keydown", function (event) {
                 let dialogue = character.generateDialogue(dialogueType);
                 newDialogueScreen(dialogue, dialogueType);
             } else {
-                alert("There is noone here to talk to. Please try another action.")
+                document.getElementById("alert-text").style.display = "flex";
+                document.getElementById("alert-text").innerHTML = "There is noone here to talk to. Please try another action.";    
             }
         }    
 
@@ -371,11 +349,11 @@ document.addEventListener("keydown", function (event) {
                     let itemImage = document.getElementById("item-image")
                     itemImage.style.display = "flex";
                     itemImage.src = character.items[1];
-                    console.log(itemImage.src);
                 } 
                 newDialogueScreen(dialogue, dialogueType);
             } else {
-                alert("This is not a valid answer. Please answer a, b, c or d.")
+                document.getElementById("alert-text").style.display = "flex";
+                document.getElementById("alert-text").innerHTML = "This is not a valid answer. Please answer a, b, c or d.";    
             }
         }    
 
@@ -383,7 +361,8 @@ document.addEventListener("keydown", function (event) {
             if (document.getElementById("dialogue-text").style.display != "none") {
                 endDialogue();
             } else {
-                alert("You can't just 'leave' right now!")
+                document.getElementById("alert-text").style.display = "flex";
+                document.getElementById("alert-text").innerHTML = "You can't just 'leave' right now!";    
             }
         }    
 
@@ -391,10 +370,12 @@ document.addEventListener("keydown", function (event) {
             let currentRoom = PlayerOne.room;
             if (currentRoom.character === Lady && Lady.attempts !== 0) {
                 bossFight();
-            } else if (Lady.attempts === 0) {
-                alert("You need to answer your lady's question first.")
+            } else if (currentRoom.character === Lady && Lady.attempts === 0) {
+                document.getElementById("alert-text").style.display = "flex";
+                document.getElementById("alert-text").innerHTML = "You need to answer your lady's question first.";    
             } else {
-                alert("You have nothing to check in this room.")
+                document.getElementById("alert-text").style.display = "flex";
+                document.getElementById("alert-text").innerHTML = "You have nothing to check in this room.";    
             }        
         }    
 
@@ -405,19 +386,12 @@ document.addEventListener("keydown", function (event) {
 })
 
 const startGame = () => {
-    /*let existingMusic = document.getElementsByTagName('audio');
-    console.log(existingMusic);
-    if (existingMusic.length !== 0) {
-        existingMusic.remove();
-    }*/
 
     var music = document.getElementById("audio");
     music.setAttribute("src", "./media/escape.mp3");
     music.setAttribute("autoplay", "autoplay");
     music.setAttribute("controls", "controls");
     music.setAttribute("loop", "loop");
-
-    console.log(document.getElementsByTagName('audio'));
 
     document.getElementById("dialogue-text").style.display = "none";
     document.getElementById("win-text").style.display = "none";
@@ -443,6 +417,7 @@ const startGame = () => {
 const newRoom = (room) => {
     document.getElementById("room-text").style.display = "flex";
     document.getElementById("room-name").innerHTML = capitalLetter(room.name);
+    document.getElementById("alert-text").style.display = "none";
     document.getElementById("dialogue-text").style.display = "none";
     document.getElementById("item-image").style.display = "none";
     document.getElementById("room-text").innerHTML = room.roomMessage();
@@ -457,6 +432,7 @@ const newRoom = (room) => {
 
 const newDialogueScreen = (dialogue, dialogueType) => {
     document.getElementById("room-text").style.display = "none";
+    document.getElementById("alert-text").style.display = "none";
     document.getElementById("dialogue-text").style.display = "flex";
     document.getElementById("dialogue-text").innerHTML = dialogue;
     let currentRoom = PlayerOne.room;
@@ -473,6 +449,7 @@ const newDialogueScreen = (dialogue, dialogueType) => {
 
 const endDialogue = () => {
     document.getElementById("dialogue-text").style.display = "none";
+    document.getElementById("alert-text").style.display = "none";
     document.getElementById("item-image").style.display = "none";
     document.getElementById("room-text").style.display = "flex";
     newRoom(PlayerOne.room);
